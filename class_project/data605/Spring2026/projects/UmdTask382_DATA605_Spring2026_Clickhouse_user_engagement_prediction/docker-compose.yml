@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    ports:
+      - "8123:8123"   # HTTP
+      - "9000:9000"   # Native
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+  notebook:
+    build: .
+    container_name: jupyter_notebook
+    ports:
+      - "8888:8888"
+    depends_on:
+      - clickhouse
+    volumes:
+      - .:/app
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - clickhouse
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+volumes:
+  clickhouse_data:
