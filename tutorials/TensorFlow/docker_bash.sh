@@ -25,11 +25,11 @@ run "docker image ls $FULL_IMAGE_NAME"
 # Configure and run the Docker container with interactive bash shell.
 # - Container is removed automatically on exit (--rm)
 # - Interactive mode with TTY allocation (-ti)
-# - Port forwarding for Jupyter (8888)
-# - Current directory mounted to /data inside container
+# - Port forwarding for Jupyter or other services
+# - Git root mounted to /git_root inside container
 # - MPS fallback enabled for Apple Silicon
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8888
+PORT=
 DOCKER_CMD=$(get_docker_bash_command)
 DOCKER_RUN_OPTS="-e PYTORCH_ENABLE_MPS_FALLBACK=1"
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT "$DOCKER_RUN_OPTS")
